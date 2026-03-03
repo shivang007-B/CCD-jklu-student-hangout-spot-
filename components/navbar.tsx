@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Coffee, Menu, X, Heart, ArrowUpRight } from "lucide-react";
+import { Coffee, Menu, X, ArrowUpRight } from "lucide-react";
 import { Button } from "./ui/button";
 
 export function NavBar() {
@@ -92,7 +92,7 @@ export function NavBar() {
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className={`text-base font-medium p-2 rounded-md ${pathname === link.href
+                                className={`text-base font-medium p-2 rounded-md font-outfit ${pathname === link.href
                                     ? "bg-secondary text-primary"
                                     : "text-foreground/80 hover:bg-secondary/50"
                                     }`}

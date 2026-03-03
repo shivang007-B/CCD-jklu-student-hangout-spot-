@@ -48,10 +48,10 @@
 }
 
 :root {
+  color-scheme: dark;
   --radius: 0.625rem;
-  /* Pure Background: Deep Charcoal */
+  /* Dark Theme — Village Chef Style */
   --background: #161616;
-  /* Text: Creamy White */
   --foreground: #F9FAFB;
   --card: #202020;
   --card-foreground: #F9FAFB;
@@ -60,13 +60,13 @@
   /* Primary: Vibrant Yellow */
   --primary: #FFB800;
   --primary-foreground: #161616;
-  /* Secondary: Darker Card / Bubble */
+  /* Secondary: Darker Card */
   --secondary: #2A2A2A;
   --secondary-foreground: #F9FAFB;
   /* Muted */
   --muted: #2A2A2A;
   --muted-foreground: #9CA3AF;
-  /* Accent: Village Orange / Yellow */
+  /* Accent: Village Orange */
   --accent: #FF7A00;
   --accent-foreground: #161616;
   --accent-red: #EF4444;
@@ -146,17 +146,37 @@
   }
 
   .glass-nav {
-    @apply bg-[#161616]/40 backdrop-blur-[12px] border-b border-border shadow-sm;
+    @apply bg-[#161616]/80 backdrop-blur-[12px] border-b border-border shadow-sm;
   }
 
   .menu-card {
-    @apply bg-white dark:bg-card border border-border/50 rounded-[12px] transition-all duration-300;
+    @apply bg-card border border-border/50 rounded-[16px] transition-all duration-300;
   }
 
   .menu-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(44, 24, 16, 0.15);
-    /* New Spec Shadow */
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .realistic-shadow {
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 184, 0, 0.25);
+    border-radius: 20px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 184, 0, 0.5);
   }
 }
 
@@ -179,12 +199,6 @@
 
   100% {
     transform: scale(1);
-  }
-}
-
-@layer utilities {
-  .realistic-shadow {
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
   }
 }
 
