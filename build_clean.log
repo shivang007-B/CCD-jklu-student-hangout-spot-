@@ -1,0 +1,77 @@
+﻿
+> ccd-digital-hub@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 3.3s
+  Running TypeScript ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/7) ...
+node.exe : Error 
+occurred prerendering 
+page "/". Read more: ht
+tps://nextjs.org/docs/m
+essages/prerender-error
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (Error occurre   
+ d ...prerender-err    
+or:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+Error: Attempted to 
+call createMotionCompon
+ent() from the server 
+but 
+createMotionComponent 
+is on the client. It's 
+not possible to invoke 
+a client function from 
+the server, it can 
+only be rendered as a 
+Component or passed to 
+props of a Client 
+Component.
+    at <unknown> (C:\Us
+ers\hp\.gemini\antigrav
+ity\scratch\ccd-digital
+-hub\.next\server\chunk
+s\ssr\_b47e5056._.js:1:
+2199)
+    at Object.get (C:\U
+sers\hp\.gemini\antigra
+vity\scratch\ccd-digita
+l-hub\.next\server\chun
+ks\ssr\_b47e5056._.js:1
+:102952)
+    at fo (C:\Users\hp\
+.gemini\antigravity\scr
+atch\ccd-digital-hub\.n
+ext\server\chunks\ssr\_
+b47e5056._.js:1:116177)
+    at stringify 
+(<anonymous>) {
+  digest: '653933868'
+}
+Export encountered an 
+error on /page: /, 
+exiting the build.
+Γ¿» Next.js build 
+worker exited with 
+code: 1 and signal: 
+null

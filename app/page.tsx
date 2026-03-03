@@ -1,65 +1,148 @@
-import Image from "next/image";
+"use client";
+
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowUpRight, Clock, Star, Pizza } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+
+const reviews = [
+  { user: "@JKLU_Dev", text: "Cold Coffee saved my deadline.", time: "12m ago" },
+  { user: "@RiyaCampus", text: "Pav Bhaji = Peak Comfort Food.", time: "45m ago" },
+  { user: "@TechBro24", text: "That new spicy sauce is fire! \ud83d\udd25", time: "1h ago" },
+];
 
 export default function Home() {
+  const { scrollYProgress } = useScroll();
+
+  // Parallax effect for the hero video
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="flex flex-col min-h-screen">
+      <section className="bg-background py-24 px-6 min-h-screen pt-32 w-full">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-[250px] md:auto-rows-[300px]">
+
+          {/* TILE 1: IMMERSIVE HERO VIDEO (2x2) */}
+          <motion.div style={{ scale }} className="md:col-span-2 md:row-span-2 relative overflow-hidden rounded-3xl bg-secondary group realistic-shadow border border-border">
+            {/* Fallback gradients in case video isn't found/loaded */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-accent/20 to-secondary/80 mix-blend-overlay z-10" />
+
+            {/* The video loop - pulling from public/ or an external high-res source if needed. 
+                For now we use a generic placeholder that looks tasty and dark. */}
+            <video
+              autoPlay loop muted playsInline
+              className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-100 grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000 z-0"
+              poster="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              {/* 
+                 <source src="/pizza-pull.mp4" type="video/mp4" /> 
+               */}
+            </video>
+
+            {/* Floating Emojis */}
+            <motion.div
+              animate={{ y: [0, -10, 0], rotate: [-2, 2, -2] }}
+              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+              className="absolute top-10 right-10 z-20 text-4xl drop-shadow-xl"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              🤤
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, 15, 0], rotate: [2, -2, 2] }}
+              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
+              className="absolute bottom-32 right-20 z-20 text-3xl drop-shadow-xl"
+            >
+              🔥
+            </motion.div>
+
+            <div className="relative z-20 p-8 md:p-12 h-full flex flex-col justify-end bg-gradient-to-t from-background/90 via-background/20 to-transparent">
+              {/* Blur backdrop overlay strictly for text readability */}
+              <div className="absolute bottom-0 left-0 right-0 h-2/3 backdrop-blur-[4px] -z-10 bg-gradient-to-t from-background via-background/50 to-transparent" />
+
+              <motion.span
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-primary font-outfit font-bold tracking-widest uppercase mb-3 text-sm md:text-base drop-shadow-md"
+              >
+                Grab Big Deals
+              </motion.span>
+              <h2 className="text-5xl md:text-7xl font-bold text-foreground leading-tight font-outfit drop-shadow-lg">
+                On <span className="text-primary italic font-newsreader">Yummy Meals!</span>
+              </h2>
+            </div>
+          </motion.div>
+
+          {/* TILE 2: DATA-PULSE (1x1) */}
+          <div className="md:col-span-1 md:row-span-1 bg-card p-6 md:p-8 rounded-3xl realistic-shadow border border-border flex flex-col justify-between group hover:border-primary/50 transition-colors">
+            <div className="flex justify-between items-center text-primary">
+              <Star fill="currentColor" size={28} className="animate-pulse-intense" />
+              <span className="text-5xl font-black font-outfit">142</span>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground font-outfit">Orders This Hour</p>
+              <p className="text-2xl font-bold font-outfit text-foreground mt-1 group-hover:text-primary transition-colors">Masala Maggi</p>
+            </div>
+          </div>
+
+          {/* TILE 3: LIVE VIBE FEED (1x2) */}
+          <div className="md:col-span-1 md:row-span-2 bg-card rounded-3xl p-6 md:p-8 realistic-shadow border border-border flex flex-col justify-between overflow-hidden">
+            <h3 className="text-2xl font-bold font-outfit text-foreground flex items-center justify-between">
+              Live Vibes <Clock size={20} className="text-primary" />
+            </h3>
+
+            <div className="space-y-4 flex-grow overflow-hidden relative my-6">
+              {/* Fade out edges for the scroll effect */}
+              <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-card to-transparent z-10" />
+              <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-card to-transparent z-10" />
+
+              <motion.div
+                animate={{ y: ["0%", "-50%"] }}
+                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                className="space-y-4"
+              >
+                {/* Duplicate the array to create seamless loop */}
+                {[...reviews, ...reviews].map((rev, i) => (
+                  <div key={`${rev.user}-${i}`} className="bg-secondary p-4 rounded-xl border border-border/50 group hover:border-primary/30 transition-colors">
+                    <p className="font-bold font-outfit text-foreground flex justify-between items-center text-sm md:text-base">
+                      {rev.user}
+                      <span className="text-xs text-muted-foreground">{rev.time}</span>
+                    </p>
+                    <p className="italic font-newsreader text-muted-foreground mt-2">&quot;{rev.text}&quot;</p>
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+
+            <Button className="w-full h-14 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl font-bold text-sm md:text-base transition-transform hover:scale-[1.02] font-outfit shadow-lg shadow-primary/20">
+              Share Your Mood
+            </Button>
+          </div>
+
+          {/* TILE 4: REORDER FORM (1x1) */}
+          <div className="md:col-span-1 md:row-span-1 bg-card p-6 md:p-8 rounded-3xl realistic-shadow border border-border flex flex-col justify-between group hover:border-accent/50 transition-colors">
+            <div className="flex justify-between items-start">
+              <div className="bg-accent/10 p-2 rounded-lg text-accent">
+                <Pizza size={24} />
+              </div>
+              <ArrowUpRight size={20} className="text-muted-foreground group-hover:text-foreground opacity-50 group-hover:opacity-100 transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
+            </div>
+            <div>
+              <p className="font-bold font-outfit text-lg mb-3 text-foreground">Cheese Pizza</p>
+              <select className="w-full p-3 bg-secondary rounded-[10px] text-sm font-outfit border border-border mb-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-foreground appearance-none cursor-pointer hover:bg-secondary/80 transition-colors">
+                <option>Extra Cheese</option>
+                <option>Crispy Base</option>
+                <option>Double Topping</option>
+              </select>
+              <Button asChild className="w-full h-12 bg-accent text-accent-foreground hover:bg-accent/90 rounded-[10px] font-bold text-sm hover:scale-[1.02] transition-transform font-outfit shadow-md">
+                <Link href={`https://wa.me/919876543210?text=${encodeURIComponent("Hi CCD, I'd like to order 1x Cheese Pizza with Extra Cheese.")}`} target="_blank">
+                  Quick Order <span className="ml-2 font-mono">₹299</span>
+                </Link>
+              </Button>
+            </div>
+          </div>
+
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </section>
     </div>
   );
 }
