@@ -1,274 +1,500 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Heart } from "lucide-react";
+import Image from "next/image";
 
 /* ══════════════════════════════════════════════════════
-   COMPLETE CCD MENU — Extracted from actual menu cards
+   TYPES
    ══════════════════════════════════════════════════════ */
+interface MenuItem {
+  id: number;
+  name: string;
+  price: number;
+  desc: string;
+  img: string;
+}
 
-const menuData = {
-    "Cold Coffii ☕": [
-        { id: 1, name: "Thick Cold Coffee", price: 50, icon: "☕", desc: "The legendary JKLU student fuel." },
-        { id: 2, name: "Cold Coffii with Extra Ice Cream", price: 60, icon: "🍦", desc: "Extra scoop for the extra vibe." },
-        { id: 3, name: "Cold Coffii with Choco Chips", price: 70, icon: "🍫", desc: "Crunchy choco chips in every sip." },
-        { id: 4, name: "Hazelnut Coffii", price: 70, icon: "🌰", desc: "Rich hazelnut flavor coffee." },
-        { id: 5, name: "Caramel Coffii", price: 70, icon: "🍮", desc: "Sweet caramel drizzle coffee." },
-        { id: 6, name: "Banana Coffii", price: 60, icon: "🍌", desc: "Something healthy! Banana blend." },
-        { id: 7, name: "Extra Strong Coffii", price: 10, icon: "💪", desc: "Add extra shot to any coffee." },
-    ],
-    "Mojito 🍹": [
-        { id: 8, name: "Green Mint Mojito", price: 50, icon: "🌿", desc: "Fresh mint, refreshing sip." },
-        { id: 9, name: "Blue Lagoon Mojito", price: 50, icon: "🔵", desc: "Blue curacao twist mojito." },
-        { id: 10, name: "Black Current Mojito", price: 50, icon: "🫐", desc: "Berry burst in every glass." },
-        { id: 11, name: "Green Apple Mojito", price: 50, icon: "🍏", desc: "Tangy green apple refresher." },
-    ],
-    "Thick Shakes 🥤": [
-        { id: 12, name: "Black Current Shake", price: 60, icon: "🫐", desc: "Rich black current thick shake." },
-        { id: 13, name: "Strawberry Shake", price: 60, icon: "🍓", desc: "Classic strawberry blend." },
-        { id: 14, name: "Vanilla Shake", price: 60, icon: "🍦", desc: "Smooth vanilla thick shake." },
-        { id: 15, name: "Oreo Shake", price: 60, icon: "🍪", desc: "Crushed Oreo cookie shake." },
-        { id: 16, name: "Butterscotch Shake", price: 70, icon: "🧈", desc: "Crunchy butterscotch delight." },
-        { id: 17, name: "Chocolate Shake", price: 60, icon: "🍫", desc: "Rich chocolate thick shake." },
-        { id: 18, name: "Kit Kat Shake", price: 80, icon: "🍫", desc: "Kit Kat blended shake." },
-        { id: 19, name: "Biscoff Shake", price: 80, icon: "🍪", desc: "Lotus Biscoff caramel shake." },
-    ],
-    "Maggi 🍜": [
-        { id: 20, name: "Plain Maggi", price: 40, icon: "🍜", desc: "The OG 2 minute noodle." },
-        { id: 21, name: "Masala Maggi", price: 45, icon: "🌶️", desc: "Extra masala, extra taste." },
-        { id: 22, name: "Schezwan Maggi", price: 50, icon: "🔥", desc: "Spicy schezwan tossed maggi." },
-        { id: 23, name: "Veg Tadka Maggi", price: 50, icon: "🥘", desc: "Maggi with veggie tadka." },
-        { id: 24, name: "Perry Perry Cheese Maggi", price: 70, icon: "🧀", desc: "Peri peri + cheese overload." },
-        { id: 25, name: "Egg Maggi (With 2 Eggs)", price: 70, icon: "🥚", desc: "Maggi loaded with 2 eggs." },
-        { id: 26, name: "Cheese Maggi", price: 70, icon: "🧀", desc: "Extra cheesy maggi bowl." },
-    ],
-    "Jumbo Burger 🍔": [
-        { id: 27, name: "Veg Burger (Large Patty)", price: 50, icon: "🍔", desc: "Classic crispy veg patty burger." },
-        { id: 28, name: "Double Tikki Burger", price: 60, icon: "🍔", desc: "Double the patty, double the fun." },
-        { id: 29, name: "Veg Cheese Burger", price: 70, icon: "🧀", desc: "Loaded with extra cheese." },
-        { id: 30, name: "Tandoori Burger", price: 60, icon: "🔥", desc: "Smoky tandoori spiced burger." },
-        { id: 31, name: "Veg Burger Combo Offer", price: 90, icon: "🎉", desc: "Burger + fries combo deal." },
-    ],
-    "Pizza 🍕": [
-        { id: 32, name: "OTC Pizza", price: 89, icon: "🍕", desc: "Over the counter classic pizza." },
-        { id: 33, name: "CCD Special Pizza", price: 99, icon: "⭐", desc: "Sweet Corn + Jalapeno + Olive." },
-    ],
-    "Sandwich 🥪": [
-        { id: 34, name: "Veg Grilled Sandwich", price: 50, icon: "🥪", desc: "Classic veg grilled, 4 large pcs." },
-        { id: 35, name: "Tandoori Sandwich", price: 70, icon: "🔥", desc: "Tandoori masala grilled sandwich." },
-        { id: 36, name: "Aloo Sandwich", price: 50, icon: "🥔", desc: "Spiced aloo filling sandwich." },
-        { id: 37, name: "Cheese Grilled Sandwich", price: 80, icon: "🧀", desc: "Extra cheese grilled sandwich." },
-    ],
-    "Rolls 🌯": [
-        { id: 38, name: "Veg Roll", price: 50, icon: "🌯", desc: "Crispy veg stuffed roll." },
-        { id: 39, name: "Veg Cheese Roll", price: 80, icon: "🧀", desc: "Cheesy veg roll wrap." },
-        { id: 40, name: "Egg Roll (With Double Egg)", price: 70, icon: "🥚", desc: "Double egg stuffed roll." },
-    ],
-    "Pasta 🍝": [
-        { id: 41, name: "White Sauce Pasta", price: 99, icon: "🍝", desc: "Creamy white sauce pasta." },
-        { id: 42, name: "Pink Sauce Pasta", price: 99, icon: "🍝", desc: "Creamy & cheesy pink sauce." },
-        { id: 43, name: "Spaghetti Pasta", price: 90, icon: "🍝", desc: "Classic spaghetti style pasta." },
-    ],
-    "French Fry 🍟": [
-        { id: 44, name: "Regular French Fry", price: 70, icon: "🍟", desc: "Crispy golden salted fries." },
-        { id: 45, name: "Perry Perry French Fry", price: 80, icon: "🌶️", desc: "Peri peri spiced fries." },
-        { id: 46, name: "Cheese French Fry", price: 99, icon: "🧀", desc: "Loaded cheese fries." },
-    ],
-    "Fried Rice 🍚": [
-        { id: 47, name: "Veg Fried Rice", price: 50, icon: "🍚", desc: "Classic veg fried rice." },
-        { id: 48, name: "Schezwan Fried Rice", price: 60, icon: "🔥", desc: "Spicy schezwan fried rice." },
-        { id: 49, name: "Egg Fried Rice", price: 70, icon: "🥚", desc: "Egg tossed fried rice." },
-    ],
-    "Hakka Noodles 🍜": [
-        { id: 50, name: "Veg Hakka Noodles", price: 50, icon: "🍜", desc: "Stir-fried veg hakka noodles." },
-        { id: 51, name: "Schezwan Noodles", price: 60, icon: "🔥", desc: "Spicy schezwan noodles." },
-        { id: 52, name: "Egg Noodles (2 Eggs)", price: 80, icon: "🥚", desc: "Egg tossed hakka noodles." },
-    ],
-    "Patties 🥟": [
-        { id: 53, name: "Aalu Patties", price: 20, icon: "🥔", desc: "Classic aloo patties." },
-        { id: 54, name: "Masala Patties", price: 30, icon: "🌶️", desc: "Spiced masala patties." },
-        { id: 55, name: "Paneer Patties", price: 25, icon: "🧀", desc: "Soft paneer stuffed patties." },
-        { id: 56, name: "Tandoori Patties", price: 40, icon: "🔥", desc: "Smoky tandoori flavored." },
-        { id: 57, name: "Paneer Masala", price: 35, icon: "🧀", desc: "Paneer with masala twist." },
-        { id: 58, name: "Cheese Patties", price: 45, icon: "🧀", desc: "Loaded cheese patties." },
-        { id: 59, name: "Paneer Cheese", price: 45, icon: "🧀", desc: "Paneer + cheese combo." },
-        { id: 60, name: "Paneer Tandoori", price: 45, icon: "🔥", desc: "Paneer tandoori special." },
-        { id: 61, name: "Ex. Cheese Topping", price: 25, icon: "🧀", desc: "Add extra cheese topping." },
-    ],
-    "Paratha & More 🫓": [
-        { id: 62, name: "Aloo Paratha with Curd (1Pc)", price: 40, icon: "🫓", desc: "Stuffed aloo paratha + curd." },
-        { id: 63, name: "Aloo Paratha with Curd + Amul Butter (1Pc)", price: 50, icon: "🧈", desc: "Paratha + curd + Amul butter." },
-        { id: 64, name: "Pav Bhaji", price: 60, icon: "🍛", desc: "Classic pav bhaji, buttery & spicy." },
-        { id: 65, name: "Extra Pav / Bhaji", price: 10, icon: "🍞", desc: "Add extra pav or bhaji." },
-    ],
-    "Omelet 🍳": [
-        { id: 66, name: "Sp. Jumbo Omelet (With Double Egg)", price: 50, icon: "🍳", desc: "Special jumbo double egg omelet." },
-        { id: 67, name: "Bread Cheese Omelet (With Double Egg)", price: 75, icon: "🧀", desc: "Cheesy bread omelet." },
-        { id: 68, name: "Only Omelate (With 2 Egg)", price: 45, icon: "🥚", desc: "Simple double egg omelette." },
-    ],
-    "More Drinks ☕": [
-        { id: 69, name: "Kulhad Masala Chai", price: 15, icon: "☕", desc: "Kadak masala chai in kulhad." },
-        { id: 70, name: "Hot Coffee (Hand Whipped)", price: 30, icon: "☕", desc: "Hand whipped hot coffee (30/60)." },
-        { id: 71, name: "Hot Chocolate", price: 25, icon: "🍫", desc: "Warm rich hot chocolate." },
-        { id: 72, name: "Lemon Mint Iced Tea", price: 50, icon: "🍋", desc: "Refreshing lemon mint iced tea." },
-        { id: 73, name: "Hot Dark Chocolate Pastry", price: 50, icon: "🎂", desc: "Warm dark chocolate pastry." },
-    ],
+/* ══════════════════════════════════════════════════════
+   COMPLETE CCD MENU DATA — web images (Unsplash)
+   ══════════════════════════════════════════════════════ */
+const menuData: Record<string, MenuItem[]> = {
+  "Cold Coffii": [
+    { id: 1, name: "Thick Cold Coffee", price: 50, desc: "The legendary JKLU student fuel.", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80&fit=crop&auto=format" },
+    { id: 2, name: "Cold Coffii with Extra Ice Cream", price: 60, desc: "Extra scoop for the extra vibe.", img: "https://images.unsplash.com/photo-1551776235-dde6d9afc41c?w=600&q=80&fit=crop&auto=format" },
+    { id: 3, name: "Cold Coffii with Choco Chips", price: 70, desc: "Crunchy choco chips in every sip.", img: "https://images.unsplash.com/photo-1606936560208-4e03f9b8b19f?w=600&q=80&fit=crop&auto=format" },
+    { id: 4, name: "Hazelnut Coffii", price: 70, desc: "Rich hazelnut flavor coffee.", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80&fit=crop&auto=format" },
+    { id: 5, name: "Caramel Coffii", price: 70, desc: "Sweet caramel drizzle coffee.", img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600&q=80&fit=crop&auto=format" },
+    { id: 6, name: "Banana Coffii", price: 60, desc: "Something healthy! Banana blend.", img: "https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&q=80&fit=crop&auto=format" },
+    { id: 7, name: "Extra Strong Coffii", price: 10, desc: "Add extra shot to any coffee.", img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "Mojito": [
+    { id: 8, name: "Green Mint Mojito", price: 50, desc: "Fresh mint, refreshing sip.", img: "https://images.unsplash.com/photo-1536935338788-846bb9081813?w=600&q=80&fit=crop&auto=format" },
+    { id: 9, name: "Blue Lagoon Mojito", price: 50, desc: "Blue curacao twist mojito.", img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&q=80&fit=crop&auto=format" },
+    { id: 10, name: "Black Current Mojito", price: 50, desc: "Berry burst in every glass.", img: "https://images.unsplash.com/photo-1570696516188-ade861b84a49?w=600&q=80&fit=crop&auto=format" },
+    { id: 11, name: "Green Apple Mojito", price: 50, desc: "Tangy green apple refresher.", img: "https://images.unsplash.com/photo-1437418747212-8d9709afab22?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "Thick Shakes": [
+    { id: 12, name: "Black Current Shake", price: 60, desc: "Rich black current thick shake.", img: "https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=600&q=80&fit=crop&auto=format" },
+    { id: 13, name: "Strawberry Shake", price: 60, desc: "Classic strawberry blend.", img: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=600&q=80&fit=crop&auto=format" },
+    { id: 14, name: "Vanilla Shake", price: 60, desc: "Smooth vanilla thick shake.", img: "https://images.unsplash.com/photo-1568901839119-631418a3910d?w=600&q=80&fit=crop&auto=format" },
+    { id: 15, name: "Oreo Shake", price: 60, desc: "Crushed Oreo cookie shake.", img: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&q=80&fit=crop&auto=format" },
+    { id: 16, name: "Butterscotch Shake", price: 70, desc: "Crunchy butterscotch delight.", img: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&q=80&fit=crop&auto=format" },
+    { id: 17, name: "Chocolate Shake", price: 60, desc: "Rich chocolate thick shake.", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=600&q=80&fit=crop&auto=format" },
+    { id: 18, name: "Kit Kat Shake", price: 80, desc: "Kit Kat blended shake.", img: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&q=80&fit=crop&auto=format" },
+    { id: 19, name: "Biscoff Shake", price: 80, desc: "Lotus Biscoff caramel shake.", img: "https://images.unsplash.com/photo-1571115764595-644a1f56a55c?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "Maggi": [
+    { id: 20, name: "Plain Maggi", price: 40, desc: "The OG 2 minute noodle.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&q=80&fit=crop&auto=format" },
+    { id: 21, name: "Masala Maggi", price: 45, desc: "Extra masala, extra taste.", img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=600&q=80&fit=crop&auto=format" },
+    { id: 22, name: "Schezwan Maggi", price: 50, desc: "Spicy schezwan tossed maggi.", img: "https://images.unsplash.com/photo-1617093727343-374698b1b08d?w=600&q=80&fit=crop&auto=format" },
+    { id: 23, name: "Veg Tadka Maggi", price: 50, desc: "Maggi with veggie tadka.", img: "https://images.unsplash.com/photo-1555126634-323283e090fa?w=600&q=80&fit=crop&auto=format" },
+    { id: 24, name: "Perry Perry Cheese Maggi", price: 70, desc: "Peri peri + cheese overload.", img: "https://images.unsplash.com/photo-1542528180-1c2803fa048c?w=600&q=80&fit=crop&auto=format" },
+    { id: 25, name: "Egg Maggi (With 2 Eggs)", price: 70, desc: "Maggi loaded with 2 eggs.", img: "https://images.unsplash.com/photo-1525755662778-989d0524087e?w=600&q=80&fit=crop&auto=format" },
+    { id: 26, name: "Cheese Maggi", price: 70, desc: "Extra cheesy maggi bowl.", img: "https://images.unsplash.com/photo-1548340748-6af6f3943ade?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "Jumbo Burger": [
+    { id: 27, name: "Veg Burger (Large Patty)", price: 50, desc: "Classic crispy veg patty burger.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80&fit=crop&auto=format" },
+    { id: 28, name: "Double Tikki Burger", price: 60, desc: "Double the patty, double the fun.", img: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600&q=80&fit=crop&auto=format" },
+    { id: 29, name: "Veg Cheese Burger", price: 70, desc: "Loaded with extra cheese.", img: "https://images.unsplash.com/photo-1586816001966-79b736744398?w=600&q=80&fit=crop&auto=format" },
+    { id: 30, name: "Tandoori Burger", price: 60, desc: "Smoky tandoori spiced burger.", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=600&q=80&fit=crop&auto=format" },
+    { id: 31, name: "Veg Burger Combo Offer", price: 90, desc: "Burger + fries combo deal.", img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "Pizza": [
+    { id: 32, name: "OTC Pizza", price: 89, desc: "Over the counter classic pizza.", img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80&fit=crop&auto=format" },
+    { id: 33, name: "CCD Special Pizza", price: 99, desc: "Sweet Corn + Jalapeno + Olive.", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "Sandwich": [
+    { id: 34, name: "Veg Grilled Sandwich", price: 50, desc: "Classic veg grilled, 4 large pcs.", img: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600&q=80&fit=crop&auto=format" },
+    { id: 35, name: "Tandoori Sandwich", price: 70, desc: "Tandoori masala grilled sandwich.", img: "https://images.unsplash.com/photo-1509722747041-616f39b57569?w=600&q=80&fit=crop&auto=format" },
+    { id: 36, name: "Aloo Sandwich", price: 50, desc: "Spiced aloo filling sandwich.", img: "https://images.unsplash.com/photo-1553909489-cd47e0907980?w=600&q=80&fit=crop&auto=format" },
+    { id: 37, name: "Cheese Grilled Sandwich", price: 80, desc: "Extra cheese grilled sandwich.", img: "https://images.unsplash.com/photo-1539252554453-80ab65ce3586?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "Rolls": [
+    { id: 38, name: "Veg Roll", price: 50, desc: "Crispy veg stuffed roll.", img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80&fit=crop&auto=format" },
+    { id: 39, name: "Veg Cheese Roll", price: 80, desc: "Cheesy veg roll wrap.", img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=600&q=80&fit=crop&auto=format" },
+    { id: 40, name: "Egg Roll (With Double Egg)", price: 70, desc: "Double egg stuffed roll.", img: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "Pasta": [
+    { id: 41, name: "White Sauce Pasta", price: 99, desc: "Creamy white sauce pasta.", img: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=600&q=80&fit=crop&auto=format" },
+    { id: 42, name: "Pink Sauce Pasta", price: 99, desc: "Creamy & cheesy pink sauce.", img: "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600&q=80&fit=crop&auto=format" },
+    { id: 43, name: "Spaghetti Pasta", price: 90, desc: "Classic spaghetti style pasta.", img: "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "French Fry": [
+    { id: 44, name: "Regular French Fry", price: 70, desc: "Crispy golden salted fries.", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&q=80&fit=crop&auto=format" },
+    { id: 45, name: "Perry Perry French Fry", price: 80, desc: "Peri peri spiced fries.", img: "https://images.unsplash.com/photo-1585109649139-366815a0d713?w=600&q=80&fit=crop&auto=format" },
+    { id: 46, name: "Cheese French Fry", price: 99, desc: "Loaded cheese fries.", img: "https://images.unsplash.com/photo-1630431341973-02e1b662ec35?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "Fried Rice": [
+    { id: 47, name: "Veg Fried Rice", price: 50, desc: "Classic veg fried rice.", img: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=600&q=80&fit=crop&auto=format" },
+    { id: 48, name: "Schezwan Fried Rice", price: 60, desc: "Spicy schezwan fried rice.", img: "https://images.unsplash.com/photo-1645177628172-a94c1f96e6db?w=600&q=80&fit=crop&auto=format" },
+    { id: 49, name: "Egg Fried Rice", price: 70, desc: "Egg tossed fried rice.", img: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "Hakka Noodles": [
+    { id: 50, name: "Veg Hakka Noodles", price: 50, desc: "Stir-fried veg hakka noodles.", img: "https://images.unsplash.com/photo-1582878826629-33b7a4b51a7c?w=600&q=80&fit=crop&auto=format" },
+    { id: 51, name: "Schezwan Noodles", price: 60, desc: "Spicy schezwan noodles.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&q=80&fit=crop&auto=format" },
+    { id: 52, name: "Egg Noodles (2 Eggs)", price: 80, desc: "Egg tossed hakka noodles.", img: "https://images.unsplash.com/photo-1534482421-64566f976cfa?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "Patties": [
+    { id: 53, name: "Aalu Patties", price: 20, desc: "Classic aloo patties.", img: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80&fit=crop&auto=format" },
+    { id: 54, name: "Masala Patties", price: 30, desc: "Spiced masala patties.", img: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=600&q=80&fit=crop&auto=format" },
+    { id: 55, name: "Paneer Patties", price: 25, desc: "Soft paneer stuffed patties.", img: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d6?w=600&q=80&fit=crop&auto=format" },
+    { id: 56, name: "Tandoori Patties", price: 40, desc: "Smoky tandoori flavored.", img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=600&q=80&fit=crop&auto=format" },
+    { id: 57, name: "Paneer Masala", price: 35, desc: "Paneer with masala twist.", img: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=600&q=80&fit=crop&auto=format" },
+    { id: 58, name: "Cheese Patties", price: 45, desc: "Loaded cheese patties.", img: "https://images.unsplash.com/photo-1550317138-10000687a72b?w=600&q=80&fit=crop&auto=format" },
+    { id: 59, name: "Paneer Cheese", price: 45, desc: "Paneer + cheese combo.", img: "https://images.unsplash.com/photo-1631292784640-2b24be784d5d?w=600&q=80&fit=crop&auto=format" },
+    { id: 60, name: "Paneer Tandoori", price: 45, desc: "Paneer tandoori special.", img: "https://images.unsplash.com/photo-1505253758473-96b7015fcd40?w=600&q=80&fit=crop&auto=format" },
+    { id: 61, name: "Ex. Cheese Topping", price: 25, desc: "Add extra cheese topping.", img: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "Paratha & More": [
+    { id: 62, name: "Aloo Paratha with Curd (1Pc)", price: 40, desc: "Stuffed aloo paratha + curd.", img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80&fit=crop&auto=format" },
+    { id: 63, name: "Aloo Paratha with Curd + Amul Butter (1Pc)", price: 50, desc: "Paratha + curd + Amul butter.", img: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=600&q=80&fit=crop&auto=format" },
+    { id: 64, name: "Pav Bhaji", price: 60, desc: "Classic pav bhaji, buttery & spicy.", img: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=600&q=80&fit=crop&auto=format" },
+    { id: 65, name: "Extra Pav / Bhaji", price: 10, desc: "Add extra pav or bhaji.", img: "https://images.unsplash.com/photo-1619895862022-09114b41f16f?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "Omelet": [
+    { id: 66, name: "Sp. Jumbo Omelet (With Double Egg)", price: 50, desc: "Special jumbo double egg omelet.", img: "https://images.unsplash.com/photo-1510693206972-df098062cb71?w=600&q=80&fit=crop&auto=format" },
+    { id: 67, name: "Bread Cheese Omelet (With Double Egg)", price: 75, desc: "Cheesy bread omelet.", img: "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600&q=80&fit=crop&auto=format" },
+    { id: 68, name: "Only Omelate (With 2 Egg)", price: 45, desc: "Simple double egg omelette.", img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&q=80&fit=crop&auto=format" },
+  ],
+  "More Drinks": [
+    { id: 69, name: "Kulhad Masala Chai", price: 15, desc: "Kadak masala chai in kulhad.", img: "https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?w=600&q=80&fit=crop&auto=format" },
+    { id: 70, name: "Hot Coffee (Hand Whipped)", price: 30, desc: "Hand whipped hot coffee (30/60).", img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80&fit=crop&auto=format" },
+    { id: 71, name: "Hot Chocolate", price: 25, desc: "Warm rich hot chocolate.", img: "https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=600&q=80&fit=crop&auto=format" },
+    { id: 72, name: "Lemon Mint Iced Tea", price: 50, desc: "Refreshing lemon mint iced tea.", img: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80&fit=crop&auto=format" },
+    { id: 73, name: "Hot Dark Chocolate Pastry", price: 50, desc: "Warm dark chocolate pastry.", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80&fit=crop&auto=format" },
+  ],
 };
 
 const categories = Object.keys(menuData);
 
-export default function MenuPage() {
-    const [activeCategory, setActiveCategory] = useState(categories[0]);
+/* ══════════════════════════════════════════════════════
+   MENU CARD
+   ══════════════════════════════════════════════════════ */
+function MenuCard({ item }: { item: MenuItem }) {
+  const [imgError, setImgError] = useState(false);
 
-    const handleOrderClick = (itemName: string, itemPrice: number) => {
-        const text = encodeURIComponent(
-            `Hi CCD, I'd like to order 1x ${itemName} (₹${itemPrice}).`
-        );
-        window.open(`https://wa.me/918619471588?text=${text}`, "_blank");
-    };
-
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        show: {
-            opacity: 1,
-            transition: { staggerChildren: 0.06 },
-        },
-        exit: {
-            opacity: 0,
-            y: 20,
-            transition: { duration: 0.2 },
-        },
-    };
-
-    const itemVariants: import("framer-motion").Variants = {
-        hidden: { opacity: 0, scale: 0.9, y: 16 },
-        show: {
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            transition: { type: "spring", stiffness: 300, damping: 24 },
-        },
-    };
-
-    return (
-        <div className="pt-24 pb-16 px-4 max-w-6xl mx-auto min-h-screen">
-            <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="text-center mb-10"
-            >
-                <h1 className="font-outfit text-5xl md:text-6xl font-bold text-foreground mb-3">
-                    Our <span className="text-primary italic font-newsreader">Menu</span>
-                </h1>
-                <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto font-outfit">
-                    Kuch Bhi LoGy — Every Item Under ₹100 Only! From legendary Cold Coffii
-                    to late-night Maggi, find all your JKLU favorites.
-                </p>
-                <p className="text-xs text-muted-foreground mt-2 font-outfit">
-                    📞 For Order: 86194 71588 &nbsp;|&nbsp; 📍 Degda Complex, Opp. JKLU, Jaipur
-                </p>
-            </motion.div>
-
-            <Tabs defaultValue={categories[0]} className="w-full" onValueChange={setActiveCategory}>
-                {/* Scrollable Category Pills */}
-                <div className="flex justify-center mb-10 overflow-x-auto pb-4 -mx-4 px-4 custom-scrollbar">
-                    <TabsList className="bg-secondary/30 p-1.5 h-auto rounded-full flex-none backdrop-blur-sm border border-border/50 shadow-sm">
-                        {categories.map((category) => (
-                            <TabsTrigger
-                                key={category}
-                                value={category}
-                                className="rounded-full px-5 py-2.5 text-xs md:text-sm font-bold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all duration-300 whitespace-nowrap font-outfit"
-                            >
-                                {category}
-                            </TabsTrigger>
-                        ))}
-                    </TabsList>
-                </div>
-
-                {/* Menu Grid */}
-                <div className="relative min-h-[400px]">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={activeCategory}
-                            variants={containerVariants}
-                            initial="hidden"
-                            animate="show"
-                            exit="exit"
-                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-                        >
-                            {menuData[activeCategory as keyof typeof menuData].map((item) => (
-                                <motion.div key={item.id} variants={itemVariants} className="h-full">
-                                    <div className="menu-card group h-full flex flex-col relative overflow-hidden">
-                                        {/* Emoji Icon Section */}
-                                        <div className="h-32 bg-secondary/40 relative overflow-hidden flex items-center justify-center group-hover:bg-secondary/60 transition-colors duration-300">
-                                            <motion.div
-                                                whileHover={{ scale: 1.15, rotate: 5 }}
-                                                transition={{ duration: 0.3, ease: [0.175, 0.885, 0.32, 1.275] }}
-                                                className="text-5xl drop-shadow-xl"
-                                            >
-                                                {item.icon}
-                                            </motion.div>
-
-                                            {/* Hover Heart */}
-                                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none bg-black/10">
-                                                <Heart className="w-12 h-12 text-red-500 fill-red-500 opacity-70" />
-                                            </div>
-
-                                            {/* Price Badge */}
-                                            <div className="absolute top-3 right-3 bg-primary text-primary-foreground text-xs font-black px-2.5 py-1 rounded-full font-outfit shadow-md">
-                                                ₹{item.price}
-                                            </div>
-                                        </div>
-
-                                        {/* Content */}
-                                        <div className="p-5 flex-1 flex flex-col">
-                                            <h3 className="font-outfit text-base font-bold leading-tight group-hover:text-primary transition-colors mb-1">
-                                                {item.name}
-                                            </h3>
-                                            <p className="text-xs text-muted-foreground font-outfit mb-4 flex-grow">
-                                                {item.desc}
-                                            </p>
-
-                                            {/* Order Button */}
-                                            <Button
-                                                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl font-bold text-xs h-10 flex items-center justify-center gap-2 font-outfit shadow-sm hover:scale-[1.02] transition-transform"
-                                                onClick={() => handleOrderClick(item.name, item.price)}
-                                            >
-                                                <Heart className="w-3.5 h-3.5" /> Order via WhatsApp
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </motion.div>
-                    </AnimatePresence>
-                </div>
-            </Tabs>
-
-            {/* Bottom Info */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="mt-16 text-center space-y-2"
-            >
-                <p className="text-muted-foreground text-sm font-outfit">
-                    ⏰ Timing: 8 AM to 9:45 PM &nbsp;|&nbsp; 🏷️ Pizza Packing 10/- Extra
-                </p>
-                <p className="text-muted-foreground text-xs font-outfit">
-                    Order Will Be Accepted After Payment Only · Self Service (From Counter Only)
-                </p>
-                <p className="text-primary font-bold text-sm font-outfit">
-                    🎉 We Accept B&apos;day & Kitty Party Orders!
-                </p>
-                <p className="text-muted-foreground text-xs font-outfit">
-                    📸 @ccd_jaipur
-                </p>
-            </motion.div>
-        </div>
+  const handleOrder = () => {
+    const text = encodeURIComponent(
+      `Hi CCD, I'd like to order 1x ${item.name} (₹${item.price}).`
     );
+    window.open(`https://wa.me/918619471588?text=${text}`, "_blank");
+  };
+
+  return (
+    <div className="ccd-card">
+      <div className="ccd-card-img">
+        {!imgError ? (
+          <Image
+            src={item.img}
+            alt={item.name}
+            fill
+            sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 25vw"
+            className="ccd-food-img"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="ccd-fallback" />
+        )}
+        <div className="ccd-img-overlay" />
+        <span className="ccd-price">₹{item.price}</span>
+      </div>
+
+      <div className="ccd-card-body">
+        <h3 className="ccd-item-name">{item.name}</h3>
+        <p className="ccd-item-desc">{item.desc}</p>
+        <button className="ccd-order-btn" onClick={handleOrder}>
+          Order via WhatsApp
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════
+   MAIN PAGE
+   ══════════════════════════════════════════════════════ */
+export default function MenuPage() {
+  const [activeCategory, setActiveCategory] = useState(categories[0]);
+
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap');
+
+        .ccd-root {
+          background: #0A0A0A;
+          color: #FAFAFA;
+          font-family: 'Syne', sans-serif;
+          min-height: 100vh;
+        }
+
+        /* ── HERO ── */
+        .ccd-hero {
+          padding: 64px 24px 36px;
+          text-align: center;
+          position: relative;
+          overflow: hidden;
+        }
+        .ccd-hero::before {
+          content: '';
+          position: absolute;
+          top: -60px; left: 50%;
+          transform: translateX(-50%);
+          width: 700px; height: 500px;
+          background: radial-gradient(ellipse, rgba(245,197,24,0.10) 0%, transparent 70%);
+          pointer-events: none;
+        }
+        .ccd-badge {
+          display: inline-block;
+          background: #F5C518;
+          color: #0A0A0A;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 2px;
+          padding: 5px 14px;
+          border-radius: 2px;
+          text-transform: uppercase;
+          margin-bottom: 14px;
+        }
+        .ccd-title {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: clamp(60px, 10vw, 100px);
+          line-height: 0.88;
+          letter-spacing: 2px;
+          color: #FAFAFA;
+          margin: 0;
+        }
+        .ccd-title em {
+          color: #F5C518;
+          font-family: 'DM Serif Display', serif;
+          font-style: italic;
+        }
+        .ccd-subtitle {
+          color: #888;
+          font-size: 13px;
+          max-width: 460px;
+          margin: 14px auto 0;
+          line-height: 1.6;
+        }
+        .ccd-meta {
+          display: flex;
+          gap: 12px;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-top: 14px;
+        }
+        .ccd-meta span { font-size: 11px; color: #888; letter-spacing: 0.4px; }
+        .ccd-meta strong { color: #F5C518; }
+
+        /* ── TABS ── */
+        .ccd-tabs-wrap {
+          overflow-x: auto;
+          padding: 0 16px;
+          scrollbar-width: none;
+        }
+        .ccd-tabs-wrap::-webkit-scrollbar { display: none; }
+        .ccd-tabs {
+          display: flex;
+          gap: 4px;
+          min-width: max-content;
+          padding: 16px 8px;
+        }
+        .ccd-tab {
+          background: #1A1A1A;
+          border: 1px solid #252525;
+          color: #888;
+          font-family: 'Syne', sans-serif;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.8px;
+          padding: 7px 14px;
+          border-radius: 2px;
+          cursor: pointer;
+          transition: all 0.18s;
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
+        .ccd-tab:hover { color: #FAFAFA; border-color: #F5C518; }
+        .ccd-tab.active {
+          background: #F5C518;
+          color: #0A0A0A;
+          border-color: #F5C518;
+        }
+
+        /* ── SECTION ── */
+        .ccd-section {
+          padding: 20px 20px 72px;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+        .ccd-section-head {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          margin-bottom: 20px;
+        }
+        .ccd-section-head h2 {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 30px;
+          letter-spacing: 2px;
+          color: #F5C518;
+          white-space: nowrap;
+          margin: 0;
+        }
+        .ccd-divider {
+          flex: 1;
+          border: none;
+          border-top: 1px solid #252525;
+        }
+
+        /* ── GRID ── */
+        .ccd-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          gap: 2px;
+          animation: ccdFadeIn 0.35s ease both;
+        }
+        @keyframes ccdFadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── CARD ── */
+        .ccd-card {
+          background: #121212;
+          border: 1px solid #252525;
+          overflow: hidden;
+          transition: border-color 0.25s, transform 0.25s;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+        }
+        .ccd-card:hover {
+          border-color: #F5C518;
+          transform: translateY(-3px);
+        }
+
+        /* ── CARD IMAGE ── */
+        .ccd-card-img {
+          height: 190px;
+          position: relative;
+          overflow: hidden;
+          background: #1A1A1A;
+        }
+        .ccd-food-img {
+          object-fit: cover;
+          transition: transform 0.45s ease !important;
+        }
+        .ccd-card:hover .ccd-food-img {
+          transform: scale(1.07) !important;
+        }
+        .ccd-img-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            to top,
+            rgba(10,10,10,0.6) 0%,
+            transparent 55%
+          );
+          z-index: 1;
+          pointer-events: none;
+        }
+        .ccd-fallback {
+          width: 100%;
+          height: 100%;
+          background: #1E1E1E;
+        }
+
+        /* ── PRICE TAG ── */
+        .ccd-price {
+          position: absolute;
+          top: 10px; right: 10px;
+          background: #F5C518;
+          color: #0A0A0A;
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 18px;
+          padding: 3px 9px;
+          border-radius: 2px;
+          z-index: 2;
+        }
+
+        /* ── CARD BODY ── */
+        .ccd-card-body {
+          padding: 14px 16px;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+        .ccd-item-name {
+          font-size: 13px;
+          font-weight: 700;
+          line-height: 1.3;
+          margin: 0 0 5px;
+          color: #FAFAFA;
+        }
+        .ccd-item-desc {
+          font-size: 11px;
+          color: #888;
+          line-height: 1.5;
+          margin: 0 0 12px;
+          flex: 1;
+        }
+
+        /* ── ORDER BUTTON ── */
+        .ccd-order-btn {
+          width: 100%;
+          background: #F5C518;
+          color: #0A0A0A;
+          border: none;
+          font-family: 'Syne', sans-serif;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 1.2px;
+          text-transform: uppercase;
+          padding: 9px;
+          cursor: pointer;
+          border-radius: 2px;
+          transition: background 0.18s;
+        }
+        .ccd-order-btn:hover { background: #FDD835; }
+
+        /* ── FOOTER ── */
+        .ccd-footer {
+          border-top: 1px solid #252525;
+          padding: 28px 24px;
+          text-align: center;
+        }
+        .ccd-footer p {
+          font-size: 11px;
+          color: #888;
+          margin-bottom: 5px;
+          letter-spacing: 0.3px;
+        }
+        .ccd-footer strong { color: #F5C518; }
+      `}</style>
+
+      <div className="ccd-root">
+        {/* ── Hero ── */}
+        <div className="ccd-hero">
+          <div className="ccd-badge">Est. JKLU Campus · Jaipur</div>
+          <h1 className="ccd-title">
+            CCD <em>Kuch Bhi</em>
+            <br />
+            Taste Jo Dil Maange
+          </h1>
+          <p className="ccd-subtitle">
+            Every item under ₹100. From legendary Cold Coffii to late-night
+            Maggi — all your JKLU favorites.
+          </p>
+          <div className="ccd-meta">
+            <span><strong>8 AM – 9:45 PM</strong></span>
+            <span>·</span>
+            <span>Order: <strong>86194 71588</strong></span>
+            <span>·</span>
+            <span>Degda Complex, Opp. JKLU</span>
+          </div>
+        </div>
+
+        {/* ── Category Tabs ── */}
+        <div className="ccd-tabs-wrap">
+          <div className="ccd-tabs">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                className={`ccd-tab${activeCategory === cat ? " active" : ""}`}
+                onClick={() => setActiveCategory(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Menu Grid ── */}
+        <div className="ccd-section">
+          <div className="ccd-section-head">
+            <h2>{activeCategory}</h2>
+            <hr className="ccd-divider" />
+          </div>
+          <div key={activeCategory} className="ccd-grid">
+            {menuData[activeCategory].map((item) => (
+              <MenuCard key={item.id} item={item} />
+            ))}
+          </div>
+        </div>
+
+        {/* ── Footer ── */}
+        <div className="ccd-footer">
+          <p>
+            Pizza Packing <strong>₹10</strong> Extra &nbsp;·&nbsp; Order
+            accepted after payment only &nbsp;·&nbsp; Self service from counter
+          </p>
+          <p>
+            We accept <strong>Birthday &amp; Kitty Party</strong> orders!
+            &nbsp;·&nbsp; <strong>@ccd_jaipur</strong>
+          </p>
+        </div>
+      </div>
+    </>
+  );
 }
