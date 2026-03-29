@@ -30,7 +30,7 @@ export default function RootLayout({
         className={`${outfit.variable} ${outfit.className} ${newsreader.variable} antialiased bg-background text-foreground min-h-screen flex flex-col`}
       >
         <NavBar />
-        <main className="flex-1 w-full max-w-[1200px] mx-auto pt-16 md:pt-20">
+        <main className="flex-1 w-full pt-16 md:pt-20">
           {children}
         </main>
         <WhatsAppButton />

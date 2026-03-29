@@ -20,28 +20,28 @@ interface MenuItem {
 const menuData: Record<string, MenuItem[]> = {
   "Cold Coffii": [
     { id: 1, name: "Thick Cold Coffee", price: 50, desc: "The legendary JKLU student fuel.", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80&fit=crop&auto=format" },
-    { id: 2, name: "Cold Coffii with Extra Ice Cream", price: 60, desc: "Extra scoop for the extra vibe.", img: "https://images.unsplash.com/photo-1551776235-dde6d9afc41c?w=600&q=80&fit=crop&auto=format" },
-    { id: 3, name: "Cold Coffii with Choco Chips", price: 70, desc: "Crunchy choco chips in every sip.", img: "https://images.unsplash.com/photo-1606936560208-4e03f9b8b19f?w=600&q=80&fit=crop&auto=format" },
+    { id: 2, name: "Cold Coffii with Extra Ice Cream", price: 60, desc: "Extra scoop for the extra vibe.", img: "/mqdefault.jpg" },
+    { id: 3, name: "Cold Coffii with Choco Chips", price: 70, desc: "Crunchy choco chips in every sip.", img: "/cc.jpg" },
     { id: 4, name: "Hazelnut Coffii", price: 70, desc: "Rich hazelnut flavor coffee.", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80&fit=crop&auto=format" },
-    { id: 5, name: "Caramel Coffii", price: 70, desc: "Sweet caramel drizzle coffee.", img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600&q=80&fit=crop&auto=format" },
-    { id: 6, name: "Banana Coffii", price: 60, desc: "Something healthy! Banana blend.", img: "https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&q=80&fit=crop&auto=format" },
-    { id: 7, name: "Extra Strong Coffii", price: 10, desc: "Add extra shot to any coffee.", img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&q=80&fit=crop&auto=format" },
+    { id: 5, name: "Caramel Coffii", price: 70, desc: "Sweet caramel drizzle coffee.", img: "/cr.jpg" },
+    { id: 6, name: "Banana Coffii", price: 60, desc: "Something healthy! Banana blend.", img: "/Banana_3.webp" },
+    { id: 7, name: "Extra Strong Coffii", price: 10, desc: "Add extra shot to any coffee.", img: "/sc.avif" },
   ],
   "Mojito": [
-    { id: 8, name: "Green Mint Mojito", price: 50, desc: "Fresh mint, refreshing sip.", img: "https://images.unsplash.com/photo-1536935338788-846bb9081813?w=600&q=80&fit=crop&auto=format" },
-    { id: 9, name: "Blue Lagoon Mojito", price: 50, desc: "Blue curacao twist mojito.", img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&q=80&fit=crop&auto=format" },
+    { id: 8, name: "Green Mint Mojito", price: 50, desc: "Fresh mint, refreshing sip.", img: "/gm.webp" },
+    { id: 9, name: "Blue Lagoon Mojito", price: 50, desc: "Blue curacao twist mojito.", img: "/bl.jpeg" },
     { id: 10, name: "Black Current Mojito", price: 50, desc: "Berry burst in every glass.", img: "https://images.unsplash.com/photo-1570696516188-ade861b84a49?w=600&q=80&fit=crop&auto=format" },
-    { id: 11, name: "Green Apple Mojito", price: 50, desc: "Tangy green apple refresher.", img: "https://images.unsplash.com/photo-1437418747212-8d9709afab22?w=600&q=80&fit=crop&auto=format" },
+    { id: 11, name: "Green Apple Mojito", price: 50, desc: "Tangy green apple refresher.", img: "/ga.cms" },
   ],
   "Thick Shakes": [
     { id: 12, name: "Black Current Shake", price: 60, desc: "Rich black current thick shake.", img: "https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=600&q=80&fit=crop&auto=format" },
     { id: 13, name: "Strawberry Shake", price: 60, desc: "Classic strawberry blend.", img: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=600&q=80&fit=crop&auto=format" },
     { id: 14, name: "Vanilla Shake", price: 60, desc: "Smooth vanilla thick shake.", img: "https://images.unsplash.com/photo-1568901839119-631418a3910d?w=600&q=80&fit=crop&auto=format" },
     { id: 15, name: "Oreo Shake", price: 60, desc: "Crushed Oreo cookie shake.", img: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&q=80&fit=crop&auto=format" },
-    { id: 16, name: "Butterscotch Shake", price: 70, desc: "Crunchy butterscotch delight.", img: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&q=80&fit=crop&auto=format" },
+    { id: 16, name: "Butterscotch Shake", price: 70, desc: "Crunchy butterscotch delight.", img: "/bs.jpeg" },
     { id: 17, name: "Chocolate Shake", price: 60, desc: "Rich chocolate thick shake.", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=600&q=80&fit=crop&auto=format" },
     { id: 18, name: "Kit Kat Shake", price: 80, desc: "Kit Kat blended shake.", img: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&q=80&fit=crop&auto=format" },
-    { id: 19, name: "Biscoff Shake", price: 80, desc: "Lotus Biscoff caramel shake.", img: "https://images.unsplash.com/photo-1571115764595-644a1f56a55c?w=600&q=80&fit=crop&auto=format" },
+    { id: 19, name: "Biscoff Shake", price: 80, desc: "Lotus Biscoff caramel shake.", img: "/b1.jpg" },
   ],
   "Maggi": [
     { id: 20, name: "Plain Maggi", price: 40, desc: "The OG 2 minute noodle.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&q=80&fit=crop&auto=format" },
@@ -186,6 +186,8 @@ export default function MenuPage() {
           color: #FAFAFA;
           font-family: 'Syne', sans-serif;
           min-height: 100vh;
+          display: flex;
+          flex-direction: column;
         }
 
         /* ── HERO ── */
@@ -194,6 +196,9 @@ export default function MenuPage() {
           text-align: center;
           position: relative;
           overflow: hidden;
+          max-width: 1200px;
+          margin: 0 auto;
+          width: 100%;
         }
         .ccd-hero::before {
           content: '';
@@ -251,6 +256,9 @@ export default function MenuPage() {
           overflow-x: auto;
           padding: 0 16px;
           scrollbar-width: none;
+          max-width: 1200px;
+          margin: 0 auto;
+          width: 100%;
         }
         .ccd-tabs-wrap::-webkit-scrollbar { display: none; }
         .ccd-tabs {
@@ -286,6 +294,8 @@ export default function MenuPage() {
           padding: 20px 20px 72px;
           max-width: 1200px;
           margin: 0 auto;
+          flex: 1;
+          width: 100%;
         }
         .ccd-section-head {
           display: flex;
@@ -423,6 +433,9 @@ export default function MenuPage() {
           border-top: 1px solid #252525;
           padding: 28px 24px;
           text-align: center;
+          max-width: 1200px;
+          margin: 0 auto;
+          width: 100%;
         }
         .ccd-footer p {
           font-size: 11px;

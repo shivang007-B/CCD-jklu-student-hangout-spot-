@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 /* ══════════════════════════════════════════════════════
-   DATA — unchanged from original
+   DATA
    ══════════════════════════════════════════════════════ */
 const reviews = [
   { user: "@JKLU_Dev", text: "Cold Coffii saved my deadline.", time: "12m ago" },
@@ -17,24 +17,18 @@ const reviews = [
   { user: "@FoodieSingh", text: "CCD Special Pizza > everything else", time: "3h ago" },
 ];
 
-/* ══════════════════════════════════════════════════════
-   HERO SLIDES — web images
-   ══════════════════════════════════════════════════════ */
 const heroSlides = [
   { label: "Cold Coffii", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=1400&q=90&fit=crop&auto=format" },
   { label: "Masala Maggi", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=1400&q=90&fit=crop&auto=format" },
   { label: "CCD Special Pizza", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1400&q=90&fit=crop&auto=format" },
 ];
 
-/* ══════════════════════════════════════════════════════
-   SPECIAL ITEMS FROM MENU
-   ══════════════════════════════════════════════════════ */
 const specials = [
   { id: 1, name: "Thick Cold Coffee", price: 50, tag: "Best Seller", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=85&fit=crop&auto=format" },
   { id: 2, name: "CCD Special Pizza", price: 99, tag: "Chef's Pick", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&q=85&fit=crop&auto=format" },
   { id: 3, name: "Perry Perry Cheese Maggi", price: 70, tag: "Spicy Hit", img: "https://images.unsplash.com/photo-1542528180-1c2803fa048c?w=600&q=85&fit=crop&auto=format" },
   { id: 4, name: "Veg Cheese Burger", price: 70, tag: "Fan Fav", img: "https://images.unsplash.com/photo-1586816001966-79b736744398?w=600&q=85&fit=crop&auto=format" },
-  { id: 5, name: "Biscoff Shake", price: 80, tag: "New", img: "https://images.unsplash.com/photo-1571115764595-644a1f56a55c?w=600&q=85&fit=crop&auto=format" },
+  { id: 5, name: "Biscoff Shake", price: 80, tag: "New", img: "/b1.jpg" },
   { id: 6, name: "Cheese French Fry", price: 99, tag: "Must Try", img: "https://images.unsplash.com/photo-1630431341973-02e1b662ec35?w=600&q=85&fit=crop&auto=format" },
 ];
 
@@ -76,6 +70,13 @@ export default function Home() {
 
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
+        html,body{
+          margin:0!important;
+          padding:0!important;
+          width:100%;
+          overflow-x:hidden;
+        }
+
         :root{
           --blk:#080604; --blk2:#100D09; --blk3:#1A1510; --blk4:#252018;
           --brn:#3D2B1A;  --brnm:#6B4A2E; --brnl:#A0734A;
@@ -83,16 +84,33 @@ export default function Home() {
           --crm:#F2E8D5;  --crmd:#C4AD8A; --wht:#FAFAF8;
         }
 
-        .hp{background:var(--blk);color:var(--wht);font-family:'Syne',sans-serif;overflow-x:hidden}
+        .hp{
+          background:var(--blk);
+          color:var(--wht);
+          font-family:'Syne',sans-serif;
+          overflow-x:hidden;
+          width:100%;
+          margin:0;
+          padding:0;
+        }
 
         /* ── VIDEO HERO ── */
-        .hp-vh{position:relative;width:100%;height:100vh;min-height:620px;overflow:hidden;display:flex;align-items:flex-end}
+        .hp-vh{
+          position:relative;
+          width:100vw;
+          margin-left:calc(50% - 50vw);
+          height:100vh;
+          min-height:620px;
+          overflow:hidden;
+          display:flex;
+          align-items:flex-end;
+        }
         .hp-vbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.35) saturate(1.4);z-index:0}
         .hp-vslide{position:absolute;inset:0;z-index:1}
         .hp-vgrain{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px;opacity:0.04;pointer-events:none;z-index:3}
         .hp-vvig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 110%,rgba(8,6,4,1) 0%,transparent 65%),linear-gradient(to top,rgba(8,6,4,1) 0%,rgba(8,6,4,0.45) 28%,transparent 58%),linear-gradient(to bottom,rgba(8,6,4,0.55) 0%,transparent 22%);z-index:4;pointer-events:none}
 
-        .hp-hbody{position:relative;z-index:10;padding:0 5vw 72px;width:100%;display:flex;align-items:flex-end;justify-content:space-between;gap:32px}
+        .hp-hbody{position:relative;z-index:10;padding:0 3vw 72px;width:100%;max-width:1200px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:32px}
         .hp-hleft{max-width:700px}
         .hp-hbadge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:var(--yel);background:rgba(245,197,24,0.1);border:1px solid rgba(245,197,24,0.3);padding:5px 14px;border-radius:20px;margin-bottom:20px}
         .hp-hh1{font-family:'Bebas Neue',sans-serif;font-size:clamp(70px,10vw,140px);line-height:0.86;letter-spacing:2px;color:var(--wht)}
@@ -117,8 +135,32 @@ export default function Home() {
         .hp-scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,rgba(245,197,24,0.8),transparent);animation:hpSL 1.8s ease-in-out infinite}
         @keyframes hpSL{0%,100%{opacity:0;transform:scaleY(0);transform-origin:top}50%{opacity:1;transform:scaleY(1)}}
 
+        /* ── INFO STRIP (full bleed) ── */
+        .hp-info-wrap{
+          width:100vw;
+          margin-left:calc(50% - 50vw);
+          background:var(--blk2);
+          border-top:1px solid rgba(255,255,255,0.06);
+          border-bottom:1px solid rgba(255,255,255,0.06);
+        }
+        .hp-info{
+          width:100%;
+          max-width:1200px;
+          margin:0 auto;
+          padding:44px 3vw;
+          display:grid;
+          grid-template-columns:repeat(3,1fr);
+          gap:32px;
+        }
+        @media(max-width:700px){.hp-info{grid-template-columns:1fr;gap:24px}}
+        .hp-iitem{display:flex;flex-direction:column;gap:5px}
+        .hp-iico{width:36px;height:36px;border-radius:8px;background:rgba(245,197,24,0.1);display:flex;align-items:center;justify-content:center;color:var(--yel);margin-bottom:4px}
+        .hp-ilbl{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brnl)}
+        .hp-ival{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--wht);line-height:1.3}
+        .hp-isub{font-size:12px;color:var(--brnl)}
+
         /* ── SECTION ── */
-        .hp-sec{padding:80px 5vw;max-width:1400px;margin:0 auto}
+        .hp-sec{padding:80px 3vw;width:100%;max-width:1200px;margin:0 auto}
         .hp-sec-lbl{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--yel);margin-bottom:8px}
         .hp-sec-ttl{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,4vw,56px);letter-spacing:1px;color:var(--wht);margin-bottom:40px;line-height:1}
         .hp-sec-ttl em{color:var(--yel);font-family:'Playfair Display',serif;font-style:italic}
@@ -190,15 +232,6 @@ export default function Home() {
         .hp-olink:hover{background:var(--brnm);border-color:var(--yel);transform:translateY(-1px)}
         .hp-oprice{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--yel)}
 
-        /* info strip */
-        .hp-info{background:var(--blk2);border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);padding:44px 5vw;display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
-        @media(max-width:700px){.hp-info{grid-template-columns:1fr;gap:24px}}
-        .hp-iitem{display:flex;flex-direction:column;gap:5px}
-        .hp-iico{width:36px;height:36px;border-radius:8px;background:rgba(245,197,24,0.1);display:flex;align-items:center;justify-content:center;color:var(--yel);margin-bottom:4px}
-        .hp-ilbl{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brnl)}
-        .hp-ival{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--wht);line-height:1.3}
-        .hp-isub{font-size:12px;color:var(--brnl)}
-
         /* specials */
         .hp-sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
         @media(max-width:900px){.hp-sgrid{grid-template-columns:1fr 1fr}}
@@ -217,7 +250,12 @@ export default function Home() {
         .hp-sbtn:hover{background:var(--yel);color:var(--blk);border-color:var(--yel)}
 
         /* cta banner */
-        .hp-cta{margin:0 5vw 80px;border-radius:20px;overflow:hidden;position:relative;min-height:220px;display:flex;align-items:center;background:var(--brn)}
+        .hp-cta-wrap{
+          width:100vw;
+          margin-left:calc(50% - 50vw);
+          padding:0 3vw 80px;
+        }
+        .hp-cta{border-radius:20px;overflow:hidden;position:relative;min-height:220px;display:flex;align-items:center;background:var(--brn);width:100%;max-width:1200px;margin:0 auto;}
         .hp-ctabg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.22;filter:saturate(1.5)}
         .hp-ctaov{position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,6,4,0.92) 0%,rgba(61,43,26,0.55) 100%)}
         .hp-ctabody{position:relative;z-index:2;padding:48px 5vw;display:flex;align-items:center;justify-content:space-between;width:100%;gap:24px;flex-wrap:wrap}
@@ -225,7 +263,7 @@ export default function Home() {
         .hp-ctatxt h2 em{color:var(--yel);font-family:'Playfair Display',serif;font-style:italic}
         .hp-ctatxt p{font-size:13px;color:var(--crmd);max-width:400px}
 
-        @media(max-width:600px){.hp-hright{display:none}.hp-hbody{padding:0 24px 56px}}
+        @media(max-width:600px){.hp-hright{display:none}.hp-hbody{padding:0 16px 56px}}
       `}</style>
 
       <div className="hp">
@@ -329,26 +367,28 @@ export default function Home() {
         </section>
 
         {/* ══════════════════ 2. INFO STRIP ══════════════════ */}
-        <div className="hp-info">
-          {[
-            { icon: <Clock size={18} />, label: "Timings", val: "8 AM – 9:45 PM", sub: "Open every day" },
-            { icon: <Phone size={18} />, label: "Order", val: "86194 71588", sub: "WhatsApp or call" },
-            { icon: <MapPin size={18} />, label: "Location", val: "Degda Complex", sub: "Opposite JKLU, Jaipur" },
-          ].map((info) => (
-            <motion.div
-              key={info.label}
-              className="hp-iitem"
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="hp-iico">{info.icon}</div>
-              <p className="hp-ilbl">{info.label}</p>
-              <p className="hp-ival">{info.val}</p>
-              <p className="hp-isub">{info.sub}</p>
-            </motion.div>
-          ))}
+        <div className="hp-info-wrap">
+          <div className="hp-info">
+            {[
+              { icon: <Clock size={18} />, label: "Timings", val: "8 AM – 9:45 PM", sub: "Open every day" },
+              { icon: <Phone size={18} />, label: "Order", val: "86194 71588", sub: "WhatsApp or call" },
+              { icon: <MapPin size={18} />, label: "Location", val: "Degda Complex", sub: "Opposite JKLU, Jaipur" },
+            ].map((info) => (
+              <motion.div
+                key={info.label}
+                className="hp-iitem"
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="hp-iico">{info.icon}</div>
+                <p className="hp-ilbl">{info.label}</p>
+                <p className="hp-ival">{info.val}</p>
+                <p className="hp-isub">{info.sub}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
         {/* ══════════════════ 3. BENTO DASHBOARD ══════════════════ */}
@@ -385,7 +425,7 @@ export default function Home() {
                     src={heroSlides[activeSlide].img}
                     alt={heroSlides[activeSlide].label}
                     fill
-                    style={{ objectFit: "cover", transition: "transform 8s ease" }}
+                    style={{ objectFit: "cover" }}
                   />
                 </motion.div>
               </AnimatePresence>
@@ -491,6 +531,7 @@ export default function Home() {
               </div>
               <div>
                 <p className="hp-oname">Thick Cold Coffee</p>
+
                 <select className="hp-osel">
                   <option>Plain — ₹50</option>
                   <option>Extra Ice Cream — ₹60</option>
@@ -540,6 +581,7 @@ export default function Home() {
                       className="hp-simg"
                       style={{ objectFit: "cover" }}
                       onError={() => setImgErrors((p) => ({ ...p, [item.id]: true }))}
+                      unoptimized={item.id === 5}
                     />
                   ) : (
                     <div style={{ width: "100%", height: "100%", background: "var(--blk3)" }} />
@@ -560,31 +602,33 @@ export default function Home() {
         </div>
 
         {/* ══════════════════ 5. CTA BANNER ══════════════════ */}
-        <motion.div
-          className="hp-cta"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <Image
-            src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1400&q=80&fit=crop&auto=format"
-            alt="Food spread"
-            fill
-            className="hp-ctabg"
-            style={{ objectFit: "cover" }}
-          />
-          <div className="hp-ctaov" />
-          <div className="hp-ctabody">
-            <div className="hp-ctatxt">
-              <h2>Explore Our <em>Full Menu</em></h2>
-              <p>73 items. All under ₹100. Cold coffii to loaded maggi — find exactly what you&apos;re craving.</p>
+        <div className="hp-cta-wrap">
+          <motion.div
+            className="hp-cta"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <Image
+              src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1400&q=80&fit=crop&auto=format"
+              alt="Food spread"
+              fill
+              className="hp-ctabg"
+              style={{ objectFit: "cover" }}
+            />
+            <div className="hp-ctaov" />
+            <div className="hp-ctabody">
+              <div className="hp-ctatxt">
+                <h2>Explore Our <em>Full Menu</em></h2>
+                <p>73 items. All under ₹100. Cold coffii to loaded maggi — find exactly what you&apos;re craving.</p>
+              </div>
+              <Link href="/menu" className="hp-btn-y" style={{ flexShrink: 0 }}>
+                See All 73 Items <ChevronRight size={14} />
+              </Link>
             </div>
-            <Link href="/menu" className="hp-btn-y" style={{ flexShrink: 0 }}>
-              See All 73 Items <ChevronRight size={14} />
-            </Link>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
       </div>
     </>
